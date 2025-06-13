@@ -1,0 +1,77 @@
+<template>
+  <div
+    class="relative w-full max-w-md rounded-xl overflow-hidden shadow-lg bg-black"
+  >
+    <div class="relative aspect-[2/3] group">
+      <NuxtLink
+        v-if="film?.id"
+        :to="`/film/${film.id}`"
+        class="absolute inset-0 z-20"
+      />
+      <FilmPoster :poster="film?.poster" :title="film?.title" />
+    </div>
+
+    <FilmText
+      :title="film?.title"
+      :overview="film?.overview"
+      :expanded="expanded"
+      :truncate-width="truncateWidth"
+      @toggle="toggle"
+    />
+
+    <FilmActions
+      :film-id="film?.id"
+      :loading="loading"
+      :show-remove="showRemove"
+      @save="save"
+      @remove="remove"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useFilmStore } from "@/stores/useFilms";
+import { ref, computed, onMounted, watch } from "vue";
+
+const props = defineProps<{
+  film?: {
+    title: string;
+    release_date: string;
+    overview: string;
+    poster?: string | null;
+    id: number;
+  };
+  loading?: boolean;
+  showRemove?: boolean;
+}>();
+
+const store = useFilmStore();
+const expanded = ref(false);
+const cardWidth = ref(300);
+const truncateWidth = computed(() => cardWidth.value * 0.6);
+
+function toggle() {
+  expanded.value = !expanded.value;
+}
+
+function save() {
+  store.saveCurrentFilm();
+  store.fetchRandomFilm();
+}
+
+function remove() {
+  if (props.film?.id) store.removeSavedFilm(props.film.id);
+}
+
+onMounted(() => {
+  const el = document.querySelector(".card-container");
+  if (el instanceof HTMLElement) cardWidth.value = el.offsetWidth;
+});
+
+watch(
+  () => props.film,
+  () => {
+    expanded.value = false;
+  }
+);
+</script>
