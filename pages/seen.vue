@@ -12,8 +12,8 @@
 
     <!-- Message si aucun film -->
     <div v-if="seenFilms.length === 0" class="text-neutral-500 italic text-sm">
-      Aucun film n’a encore été marqué comme vu.<br />
-      Parcourez, swipez… et remplissez votre journal.
+      Aucun film n’a encore été marqué comme vu. Si vous voyez un film déjà vu
+      apparaître dans les suggestions, indiquez-le.
     </div>
 
     <!-- Liste des films en grille responsive -->

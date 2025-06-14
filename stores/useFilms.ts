@@ -129,6 +129,10 @@ export const useFilmStore = defineStore(
       return savedFilms.value.some((f) => f.id === id);
     }
 
+    function isSeen(id: number) {
+      return seenFilms.value.some((f) => f.id === id);
+    }
+
     const poster = computed(() => {
       if (!film.value?.poster_path) return null;
       return `https://image.tmdb.org/t/p/w500${film.value.poster_path}`;
@@ -144,6 +148,7 @@ export const useFilmStore = defineStore(
       savedFilms,
       removeSavedFilm,
       isSaved,
+      isSeen,
       seenFilms,
       markAsSeen,
       removeSeenFilm,
