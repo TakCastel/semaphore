@@ -8,6 +8,7 @@ export const useFilmStore = defineStore(
     const config = useRuntimeConfig();
     const film = ref<any | null>(null);
     const savedFilms = ref<any[]>([]);
+    const seenFilms = ref<any[]>([]);
     const loading = ref(false);
     const fallbackTriggered = ref(false);
 
@@ -22,12 +23,11 @@ export const useFilmStore = defineStore(
       let step = 0;
 
       try {
-        fallbackTriggered.value = false; // on reset à chaque nouvelle recherche
+        fallbackTriggered.value = false;
 
         while (!film.value && step < maxAttempts) {
           const currentFilters = { ...filters };
 
-          // Étapes progressives
           if (step >= 5) currentFilters.includeAdult = true;
           if (step >= 4) currentFilters.language = null;
           if (step >= 3) currentFilters.genre = null;
@@ -60,7 +60,6 @@ export const useFilmStore = defineStore(
 
           let results = res.results || [];
 
-          // Filtrage strict par genre si encore présent
           if (currentFilters.genre) {
             results = results.filter((movie) =>
               movie.genre_ids?.includes(parseInt(currentFilters.genre))
@@ -74,7 +73,7 @@ export const useFilmStore = defineStore(
           }
 
           step++;
-          if (step === 2) fallbackTriggered.value = true; // dès qu’on commence à relâcher les critères
+          if (step === 2) fallbackTriggered.value = true;
         }
       } catch (err) {
         console.error("Erreur TMDB :", err);
@@ -87,32 +86,47 @@ export const useFilmStore = defineStore(
       }
     }
 
-    async function fetchFilmById(id: number) {
-      loading.value = true;
-      film.value = null;
+    // Format minimal pour une Card
+    function formatFilm(raw: any) {
+      return {
+        id: raw.id,
+        title: raw.title,
+        overview: raw.overview,
+        poster: raw.poster_path
+          ? `https://image.tmdb.org/t/p/w500${raw.poster_path}`
+          : null,
+      };
+    }
 
-      try {
-        const res = await $fetch(`https://api.themoviedb.org/3/movie/${id}`, {
-          params: {
-            api_key: config.public.tmdbApiKey,
-            language: "fr-FR",
-          },
-        });
-
-        film.value = res;
-      } catch (err) {
-        console.error("Erreur lors de la récupération du film :", err);
-      } finally {
-        loading.value = false;
+    function addToList(list: Ref<any[]>, filmToAdd: any) {
+      if (!list.value.some((f) => f.id === filmToAdd.id)) {
+        list.value.push(formatFilm(filmToAdd));
       }
+    }
+
+    function removeFromList(list: Ref<any[]>, id: number) {
+      list.value = list.value.filter((f) => f.id !== id);
     }
 
     function saveCurrentFilm() {
       if (!film.value) return;
+      addToList(savedFilms, film.value);
+    }
 
-      // Vérifie doublon
-      const alreadySaved = savedFilms.value.some((f) => f.id === film.value.id);
-      if (!alreadySaved) savedFilms.value.push({ ...film.value });
+    function markAsSeen(filmToMark: any) {
+      addToList(seenFilms, filmToMark);
+    }
+
+    function removeSavedFilm(id: number) {
+      removeFromList(savedFilms, id);
+    }
+
+    function removeSeenFilm(id: number) {
+      removeFromList(seenFilms, id);
+    }
+
+    function isSaved(id: number) {
+      return savedFilms.value.some((f) => f.id === id);
     }
 
     const poster = computed(() => {
@@ -120,25 +134,19 @@ export const useFilmStore = defineStore(
       return `https://image.tmdb.org/t/p/w500${film.value.poster_path}`;
     });
 
-    function removeSavedFilm(id: number) {
-      savedFilms.value = savedFilms.value.filter((f) => f.id !== id);
-    }
-
-    function isSaved(id: number) {
-      return savedFilms.value.some((f) => f.id === id);
-    }
-
     return {
       film,
       poster,
       loading,
       fallbackTriggered,
       fetchRandomFilm,
-      fetchFilmById,
       saveCurrentFilm,
       savedFilms,
       removeSavedFilm,
       isSaved,
+      seenFilms,
+      markAsSeen,
+      removeSeenFilm,
     };
   },
   {

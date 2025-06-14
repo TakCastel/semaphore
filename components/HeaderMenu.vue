@@ -10,6 +10,7 @@
       <Icon name="lucide:film" />
       <span class="sr-only">Accueil</span>
     </NuxtLink>
+
     <NuxtLink
       to="/saved"
       class="hover:text-red-600 transition flex items-center gap-2"
@@ -18,6 +19,16 @@
     >
       <Icon name="lucide:bookmark" />
       <span class="sr-only">Films sauvegardés</span>
+    </NuxtLink>
+
+    <NuxtLink
+      to="/seen"
+      class="hover:text-red-600 transition flex items-center gap-2"
+      :class="{ 'text-red-600': $route.path === '/seen' }"
+      aria-label="Films déjà vus"
+    >
+      <Icon name="lucide:square-check" />
+      <span class="sr-only">Films déjà vus</span>
     </NuxtLink>
   </div>
 
@@ -45,6 +56,16 @@
       >
         <Icon name="lucide:bookmark" class="text-4xl" />
         <span>Films sauvegardés</span>
+      </NuxtLink>
+
+      <NuxtLink
+        to="/seen"
+        class="hover:text-red-600 transition flex flex-col items-center"
+        :class="{ 'text-red-600': $route.path === '/seen' }"
+        @click="$emit('close')"
+      >
+        <Icon name="lucide:square-check" class="text-4xl" />
+        <span>Films déjà vus</span>
       </NuxtLink>
     </div>
   </transition>

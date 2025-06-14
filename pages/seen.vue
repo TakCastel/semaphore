@@ -3,23 +3,26 @@
     <!-- Titre -->
     <header class="space-y-1">
       <h1 class="text-4xl font-logo tracking-widest text-red-600 uppercase">
-        Votre sélection
+        Films déjà vus
       </h1>
       <p class="text-sm text-neutral-400">
-        La mémoire de vos envies cinématographiques.
+        Le journal de vos explorations cinématographiques.
       </p>
     </header>
 
     <!-- Message si aucun film -->
-    <div v-if="savedFilms.length === 0" class="text-neutral-500 italic text-sm">
-      Aucun film n’a encore été sauvegardé.<br />
-      Explorez, cliquez… et construisez votre propre collection.
+    <div v-if="seenFilms.length === 0" class="text-neutral-500 italic text-sm">
+      Aucun film n’a encore été marqué comme vu.<br />
+      Parcourez, swipez… et remplissez votre journal.
     </div>
 
     <!-- Liste des films en grille responsive -->
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div
+      v-else
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
       <FilmCard
-        v-for="film in savedFilms"
+        v-for="film in seenFilms"
         :key="film.id"
         :film="{
           title: film.title,
@@ -31,16 +34,23 @@
           id: film.id,
         }"
         :loading="false"
-        :show-remove="true"
+        :show-remove="false"
         :is-saved-page="true"
+        :display-synopsis="false"
+        @remove="() => removeSeenFilm(film.id)"
       />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useFilmStore } from "@/stores/useFilms";
 
 const store = useFilmStore();
-const savedFilms = computed(() => store.savedFilms);
+const seenFilms = computed(() => store.seenFilms);
+
+function removeSeenFilm(id: number) {
+  store.removeSeenFilm(id);
+}
 </script>

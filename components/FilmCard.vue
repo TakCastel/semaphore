@@ -8,10 +8,15 @@
         :to="`/film/${film.id}`"
         class="absolute inset-0 z-20"
       />
-      <FilmPoster :poster="film?.poster" :title="film?.title" />
+      <FilmPoster
+        :poster="film?.poster"
+        :title="film?.title"
+        :display-synopsis="displaySynopsis"
+      />
     </div>
 
     <FilmText
+      v-if="displaySynopsis"
       :title="film?.title"
       :overview="film?.overview"
       :expanded="expanded"
@@ -23,8 +28,11 @@
       :film-id="film?.id"
       :loading="loading"
       :show-remove="showRemove"
+      :is-saved-page="isSavedPage"
       @save="save"
       @remove="remove"
+      @ignore="ignore"
+      @seen="markSeen"
     />
   </div>
 </template>
@@ -33,17 +41,31 @@
 import { useFilmStore } from "@/stores/useFilms";
 import { ref, computed, onMounted, watch } from "vue";
 
-const props = defineProps<{
-  film?: {
-    title: string;
-    release_date: string;
-    overview: string;
-    poster?: string | null;
-    id: number;
-  };
-  loading?: boolean;
-  showRemove?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    film?: {
+      title: string;
+      release_date: string;
+      overview: string;
+      poster?: string | null;
+      id: number;
+    };
+    loading?: boolean;
+    showRemove?: boolean;
+    isSavedPage?: boolean;
+    displaySynopsis?: boolean;
+  }>(),
+  {
+    showRemove: false,
+    loading: false,
+    isSavedPage: false,
+    displaySynopsis: true,
+  }
+);
+
+function ignore() {
+  store.fetchRandomFilm();
+}
 
 const store = useFilmStore();
 const expanded = ref(false);
@@ -56,6 +78,11 @@ function toggle() {
 
 function save() {
   store.saveCurrentFilm();
+  store.fetchRandomFilm();
+}
+
+function markSeen() {
+  if (props.film) store.markAsSeen(props.film);
   store.fetchRandomFilm();
 }
 

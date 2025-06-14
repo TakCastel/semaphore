@@ -7,7 +7,7 @@
 
     <!-- Texte en overlay mobile / à droite desktop -->
     <div
-      class="z-20 px-4 flex flex-col space-y-4 pt-[10vh] absolute top-0 left-0 w-full min-h-screen lg:min-h-0 lg:relative lg:pt-0 lg:w-auto lg:flex-1"
+      class="z-20 px-4 flex flex-col space-y-4 pt-[10vh] absolute top-0 left-0 w-full min-h-[90%] lg:min-h-0 lg:relative lg:pt-0 lg:w-auto lg:flex-1"
     >
       <h1 class="text-3xl font-bold tracking-tight">{{ film.title }}</h1>
       <FilmInfos
@@ -17,8 +17,11 @@
         :language="film.original_language"
       />
       <FilmGenres :genres="film.genres" />
-      <FilmOverview :overview="film.overview" />
-      <FilmButtons :film="film" />
+
+      <div class="flex-1 flex flex-col justify-end">
+        <FilmOverview :overview="film.overview" />
+        <FilmButtons :film="film" />
+      </div>
     </div>
   </div>
 </template>

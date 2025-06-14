@@ -13,11 +13,16 @@
       Aucune affiche disponible
     </div>
     <div
+      v-if="displaySynopsis"
       class="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/80 to-transparent z-10"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{ poster?: string | null; title?: string }>();
+defineProps<{
+  poster?: string | null;
+  title?: string;
+  displaySynopsis?: boolean;
+}>();
 </script>
