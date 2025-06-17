@@ -9,7 +9,13 @@
         :title="film?.title"
         :id="film?.id"
       />
-      <CardMovieText :title="film?.title" :overview="film?.overview" />
+
+      <!-- Texte affiché ou non -->
+      <CardMovieText
+        v-if="showText"
+        :title="film?.title"
+        :overview="film?.overview"
+      />
 
       <!-- Actions en absolute, backdrop -->
       <div
@@ -27,17 +33,23 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  film?: {
-    title: string;
-    release_date: string;
-    overview: string;
-    poster?: string | null;
-    id: number;
-  };
-  loading?: boolean;
-  showAddSeen?: boolean;
-  showAddWatchlist?: boolean;
-  showRemoveWatchlist?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    film?: {
+      title: string;
+      release_date: string;
+      overview: string;
+      poster?: string | null;
+      id: number;
+    };
+    loading?: boolean;
+    showAddSeen?: boolean;
+    showAddWatchlist?: boolean;
+    showRemoveWatchlist?: boolean;
+    showText?: boolean;
+  }>(),
+  {
+    showText: true,
+  }
+);
 </script>

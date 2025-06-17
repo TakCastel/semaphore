@@ -1,31 +1,39 @@
 <template>
   <div class="min-h-screen bg-neutral-950 text-white">
-    <FilmSkeleton v-if="loading" />
+    <MovieSkeleton v-if="loading" />
 
-    <div v-else-if="film" class="max-w-5xl mx-auto space-y-8">
-      <FilmHeader :film="film" />
-      <FilmCast :cast="cast" />
-      <FilmDirector :director="director" />
-    </div>
+    <MovieBase
+      v-else-if="film"
+      :poster-path="film.poster_path"
+      :title="film.title"
+      :overview="film.overview"
+      :release-date="film.release_date"
+      :runtime="film.runtime"
+      :language="film.original_language"
+      :genres="film.genres"
+      :providers="providers"
+      :cast="cast"
+      :director="director"
+      :film-id="film.id"
+    />
 
     <div v-else class="text-center text-red-500">Film introuvable.</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
 import { useFilmStore } from "@/stores/useFilms";
 
 const route = useRoute();
 const store = useFilmStore();
 
-const film = ref<any>(null); // local au lieu de store
+const film = ref<any>(null);
 const loading = ref(true);
 const cast = ref<any[]>([]);
 const director = ref<{ name: string; profile_path: string | null } | null>(
   null
 );
+const providers = ref<any[]>([]);
 
 onMounted(async () => {
   const id = Number(route.params.id);
@@ -36,7 +44,6 @@ onMounted(async () => {
   try {
     const config = useRuntimeConfig();
 
-    // Fetch film directement (ne touche pas store.film)
     film.value = await $fetch(`https://api.themoviedb.org/3/movie/${id}`, {
       params: {
         api_key: config.public.tmdbApiKey,
@@ -44,10 +51,8 @@ onMounted(async () => {
       },
     });
 
-    // Tu peux en parallèle stocker dans le store si utile :
     store.film = film.value;
 
-    // Fetch credits
     const credits = await $fetch(
       `https://api.themoviedb.org/3/movie/${id}/credits`,
       {
@@ -68,6 +73,19 @@ onMounted(async () => {
         name: directorData.name,
         profile_path: directorData.profile_path,
       };
+    }
+
+    const watch = await $fetch(
+      `https://api.themoviedb.org/3/movie/${id}/watch/providers`,
+      {
+        params: {
+          api_key: config.public.tmdbApiKey,
+        },
+      }
+    );
+
+    if (watch?.results?.FR?.flatrate) {
+      providers.value = watch.results.FR.flatrate;
     }
   } catch (err) {
     console.error("Erreur lors du chargement du film :", err);

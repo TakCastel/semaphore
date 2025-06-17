@@ -3,7 +3,7 @@
     <span
       v-for="genre in genres"
       :key="genre.id"
-      class="text-sm px-3 py-1 bg-black/60 text-white rounded-full backdrop-blur-sm shadow-sm border border-white/10 lg:border-white/30"
+      class="px-3 py-1 bg-neutral-800 rounded-full text-sm"
     >
       {{ genre.name }}
     </span>
@@ -12,6 +12,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  genres: { id: number; name: string }[];
+  genres: any[];
 }>();
 </script>

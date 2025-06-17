@@ -33,6 +33,7 @@
             : null,
           id: film.id,
         }"
+        :show-text="false"
       />
     </div>
   </main>
