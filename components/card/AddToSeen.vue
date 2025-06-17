@@ -11,12 +11,19 @@
 <script setup lang="ts">
 import { useFilmStore } from "@/stores/useFilms";
 
+const props = defineProps<{
+  film: {
+    id: number;
+    title: string;
+    poster: string | null;
+    overview: string;
+    release_date?: string;
+  };
+}>();
+
 const store = useFilmStore();
 
 function markAsSeen() {
-  if (store.film) {
-    store.markAsSeen(store.film);
-    store.fetchRandomFilm();
-  }
+  store.markAsSeen(props.film);
 }
 </script>

@@ -11,11 +11,13 @@
 <script setup lang="ts">
 import { useFilmStore } from "@/stores/useFilms";
 
+const props = defineProps<{
+  film: { id: number };
+}>();
+
 const store = useFilmStore();
 
 function removeFromWatchlist() {
-  if (store.film?.id) {
-    store.removeSavedFilm(store.film.id);
-  }
+  store.removeSavedFilm(props.film.id);
 }
 </script>
