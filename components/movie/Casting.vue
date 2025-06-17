@@ -8,12 +8,13 @@
         class="text-center"
       >
         <div class="w-full aspect-[2/3] rounded overflow-hidden">
-          <img
-            v-if="actor.profile_path"
-            :src="`https://image.tmdb.org/t/p/w185${actor.profile_path}`"
-            :alt="actor.name"
-            class="w-full h-full object-cover"
-          />
+          <NuxtLink v-if="actor.profile_path" :to="`/actor/${actor.id}`">
+            <img
+              :src="`https://image.tmdb.org/t/p/w185${actor.profile_path}`"
+              :alt="actor.name"
+              class="w-full h-full object-cover"
+            />
+          </NuxtLink>
           <div
             v-else
             class="w-full h-full bg-neutral-800 flex items-center justify-center text-neutral-500 text-xs"

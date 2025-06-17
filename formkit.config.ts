@@ -1,4 +1,3 @@
-// formkit.config.ts
 import { defineFormKitConfig } from "@formkit/vue";
 import { generateClasses } from "@formkit/themes";
 
@@ -14,30 +13,25 @@ export default defineFormKitConfig({
       },
       text: {
         input:
-          "bg-white/10 backdrop-blur-md text-white placeholder:text-neutral-400 px-4 py-2 rounded-full border border-white/20 focus:ring-2 focus:ring-red-500 transition w-full text-base",
+          "w-full px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white placeholder:text-neutral-400 border border-white/20 focus:ring-2 focus:ring-red-500 transition",
       },
       number: {
         input:
-          "bg-white/10 backdrop-blur-md text-white placeholder:text-neutral-400 px-4 py-2 rounded-full border border-white/20 focus:ring-2 focus:ring-red-500 transition w-full text-base",
+          "w-full px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white placeholder:text-neutral-400 border border-white/20 focus:ring-2 focus:ring-red-500 transition",
       },
       select: {
         input:
-          "bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-full border border-white/20 focus:ring-2 focus:ring-red-500 transition w-full text-base",
-      },
-      date: {
-        input:
-          "bg-white/10 backdrop-blur-md text-white placeholder:text-neutral-400 px-4 py-2 rounded-full border border-white/20 focus:ring-2 focus:ring-red-500 transition w-full text-base",
+          "w-full px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 focus:ring-2 focus:ring-red-500 transition",
       },
       checkbox: {
-        outer: "w-full",
         wrapper:
           "inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition",
         input: "accent-red-600 w-5 h-5",
-        label: "text-base text-white",
+        label: "text-sm text-white",
       },
       submit: {
         input:
-          "w-full bg-red-700 hover:bg-red-600 text-white font-semibold text-sm px-4 py-2 rounded-full transition cursor-pointer",
+          "w-full px-4 py-2 rounded-full bg-red-700 hover:bg-red-600 text-white font-semibold text-sm transition cursor-pointer",
       },
     }),
   },

@@ -2,19 +2,23 @@ import { defineNuxtPlugin } from "#app";
 import { createPinia } from "pinia";
 import localforage from "localforage";
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const pinia = createPinia();
 
-  pinia.use(({ store }) => {
-    if (import.meta.client) {
+  // Liste des stores à persister
+  const STORES_TO_PERSIST = ["film"];
+
+  pinia.use(async ({ store }) => {
+    if (import.meta.client && STORES_TO_PERSIST.includes(store.$id)) {
       const key = store.$id;
 
-      localforage.getItem(key).then((value) => {
-        if (value) {
-          store.$patch(value);
-        }
-      });
+      // 1. Charger la sauvegarde AVANT tout
+      const saved = await localforage.getItem(key);
+      if (saved && typeof saved === "object") {
+        store.$patch(saved);
+      }
 
+      // 2. Ecouter et sauvegarder ensuite SEULEMENT
       store.$subscribe((_mutation, state) => {
         const persistable = {
           savedFilms: JSON.parse(JSON.stringify(state.savedFilms)),

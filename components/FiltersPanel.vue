@@ -1,17 +1,18 @@
 <template>
-  <div v-show="open" class="fixed inset-0 z-50 pointer-events-none">
-    <transition name="slide-down" mode="out-in">
+  <transition name="slide-down" mode="out-in">
+    <div v-show="open" class="fixed inset-0 z-50">
       <aside
-        v-show="open"
-        class="absolute top-0 left-0 right-0 h-screen bg-neutral-950 text-white shadow-2xl border-t border-white/10 flex flex-col justify-between pointer-events-auto"
+        class="absolute top-0 left-0 right-0 bg-neutral-950 text-white pointer-events-auto"
         tabindex="0"
         @keyup.esc="emitClose"
       >
         <!-- Header -->
-        <div class="relative px-6 pt-6 pb-4 border-b border-white/10">
+        <div
+          class="flex justify-between items-center px-6 py-4 border-b border-white/10"
+        >
           <h2 class="text-lg font-semibold">Filtres</h2>
           <button
-            class="absolute top-6 right-6 text-neutral-400 hover:text-white text-xl"
+            class="text-2xl text-neutral-400 hover:text-white cursor-pointer"
             aria-label="Fermer les filtres"
             @click="emitClose"
           >
@@ -19,72 +20,92 @@
           </button>
         </div>
 
-        <!-- Formulaire -->
-        <div class="flex-1 p-4 overflow-y-auto">
-          <FormKit type="form" :actions="false" @submit="apply">
-            <FormKit
+        <!-- Form -->
+        <form
+          @submit.prevent="apply"
+          class="p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-160px)] w-full md:max-w-md mx-auto"
+        >
+          <div class="flex flex-col space-y-1">
+            <label class="text-sm">Genre</label>
+            <select
               v-model="filters.genre"
-              type="select"
-              name="genre"
-              label="Genre"
-              :options="[
-                { label: 'Tous genres', value: '' },
-                ...genres.map((g) => ({ label: g.name, value: g.id })),
-              ]"
-            />
+              class="w-full px-3 py-2 bg-neutral-800 text-white"
+            >
+              <option value="">Tous genres</option>
+              <option v-for="g in genres" :key="g.id" :value="g.id">
+                {{ g.name }}
+              </option>
+            </select>
+          </div>
 
-            <FormKit
+          <div class="flex flex-col space-y-1">
+            <label class="text-sm">Langue</label>
+            <select
               v-model="filters.language"
-              type="select"
-              name="language"
-              label="Langue"
-              :options="[
-                { label: 'Toutes langues', value: '' },
-                ...languages.map((l) => ({
-                  label: l.english_name,
-                  value: l.iso_639_1,
-                })),
-              ]"
-            />
+              class="w-full px-3 py-2 bg-neutral-800 text-white"
+            >
+              <option value="">Toutes langues</option>
+              <option
+                v-for="l in languages"
+                :key="l.iso_639_1"
+                :value="l.iso_639_1"
+              >
+                {{ l.english_name }}
+              </option>
+            </select>
+          </div>
 
-            <div class="flex gap-3">
-              <FormKit
-                v-model="filters.yearMin"
+          <div class="flex gap-4">
+            <div class="flex flex-col flex-1 space-y-1">
+              <label class="text-sm">Depuis</label>
+              <input
+                v-model.number="filters.yearMin"
                 type="number"
-                name="yearMin"
                 placeholder="Depuis..."
-              />
-              <FormKit
-                v-model="filters.yearMax"
-                type="number"
-                name="yearMax"
-                placeholder="Jusqu’à..."
+                class="w-full px-3 py-2 bg-neutral-800 text-white"
               />
             </div>
+            <div class="flex flex-col flex-1 space-y-1">
+              <label class="text-sm">Jusqu’à</label>
+              <input
+                v-model.number="filters.yearMax"
+                type="number"
+                placeholder="Jusqu’à..."
+                class="w-full px-3 py-2 bg-neutral-800 text-white"
+              />
+            </div>
+          </div>
 
-            <FormKit
-              v-model="filters.includeAdult"
+          <div class="flex items-center gap-3">
+            <input
+              id="includeAdult"
               type="checkbox"
-              name="includeAdult"
-              label="Inclure les films classés “adultes”"
+              v-model="filters.includeAdult"
+              class="accent-red-600 w-5 h-5"
             />
-          </FormKit>
-        </div>
+            <label for="includeAdult" class="text-sm"
+              >Inclure les films “adultes”</label
+            >
+          </div>
 
-        <!-- Footer -->
-        <div class="px-6 py-5 border-t border-white/10 space-y-3">
-          <FormKit type="submit" label="Appliquer les filtres" />
+          <button
+            type="submit"
+            class="w-full bg-red-700 hover:bg-red-600 text-white font-semibold text-sm px-4 py-2 cursor-pointer"
+          >
+            Appliquer les filtres
+          </button>
+
           <button
             type="button"
-            class="text-neutral-400 hover:text-white text-sm underline cursor-pointer"
             @click="reset"
+            class="text-sm text-neutral-400 hover:text-white underline mt-2 cursor-pointer"
           >
             Réinitialiser
           </button>
-        </div>
+        </form>
       </aside>
-    </transition>
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -100,7 +121,7 @@ const films = useFilmStore();
 const { genres, languages } = await useFiltersOptions();
 
 function apply() {
-  films.fetchRandomFilm();
+  films.fetchRandomFilm(); // déclenche la recherche avec les filtres choisis
   emit("close");
 }
 

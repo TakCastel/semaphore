@@ -1,32 +1,29 @@
+// ✅ Store corrigé : useFiltersStore.ts
+
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useFiltersStore = defineStore(
-  "filters",
-  () => {
-    const genre = ref<string | null>(null);
-    const language = ref<string | null>(null);
-    const yearMin = ref<number | null>(null);
-    const yearMax = ref<number | null>(null);
-    const includeAdult = ref(false);
+export const useFiltersStore = defineStore("filters", () => {
+  const genre = ref<string>(""); // <- pas null
+  const language = ref<string>(""); // <- pas null
+  const yearMin = ref<number | null>(null);
+  const yearMax = ref<number | null>(null);
+  const includeAdult = ref(false);
 
-    function resetFilters() {
-      genre.value = null;
-      language.value = null;
-      yearMin.value = null;
-      yearMax.value = null;
-      includeAdult.value = false;
-    }
-
-    return {
-      genre,
-      language,
-      yearMin,
-      yearMax,
-      includeAdult,
-      resetFilters,
-    };
-  },
-  {
-    persist: true,
+  function resetFilters() {
+    genre.value = "";
+    language.value = "";
+    yearMin.value = null;
+    yearMax.value = null;
+    includeAdult.value = false;
   }
-);
+
+  return {
+    genre,
+    language,
+    yearMin,
+    yearMax,
+    includeAdult,
+    resetFilters,
+  };
+});
