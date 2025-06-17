@@ -10,8 +10,8 @@
       class="text-xl"
       :class="{ spinner: loading }"
     />
-    <span class="hidden sm:inline whitespace-nowrap min-w-[21ch] text-left">
-      {{ loading ? "Chargement..." : "Propose moi un nouveau film" }}
+    <span class="hidden sm:inline whitespace-nowrap min-w-[18ch] text-left">
+      {{ loading ? "Chargement..." : "Propose moi un autre film" }}
     </span>
   </button>
 </template>

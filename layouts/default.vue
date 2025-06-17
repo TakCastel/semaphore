@@ -17,7 +17,7 @@
       <slot />
     </main>
 
-    <!-- ✅ Footer ajouté ici -->
+    <!-- Footer -->
     <FooterBase />
   </div>
 </template>

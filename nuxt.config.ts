@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tsconfigPaths from "vite-tsconfig-paths";
+import pkg from "./package.json";
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
@@ -7,7 +8,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      version: process.env.npm_package_version,
+      version: pkg.version,
       tmdbApiKey: process.env.TMDB_API_KEY,
     },
   },
