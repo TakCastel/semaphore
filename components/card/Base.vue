@@ -19,12 +19,12 @@
 
       <!-- Actions en absolute, backdrop -->
       <div
-        v-if="showAddSeen || showAddWatchlist || showRemoveWatchlist"
+        v-if="(showAddSeen || showAddWatchlist || showRemoveWatchlist) && film"
         class="absolute bottom-0 left-0 right-0 px-4 py-4 flex justify-between items-center backdrop-blur-md bg-neutral-900/90 z-20"
       >
         <CardAddToSeen v-if="showAddSeen" :film="film" />
         <div class="flex items-center gap-3">
-          <CardAddToWatchlist v-if="showAddWatchlist" />
+          <CardAddToWatchlist v-if="showAddWatchlist" :film="film" />
           <CardRemoveFromWatchlist v-if="showRemoveWatchlist" :film="film" />
         </div>
       </div>

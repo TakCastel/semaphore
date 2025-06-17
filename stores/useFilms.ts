@@ -111,7 +111,9 @@ export const useFilmStore = defineStore("film", {
     },
 
     addToList(list: any[], filmToAdd: any) {
-      const formatted = this.formatFilm(filmToAdd); // ✅ Génère poster complet
+      const formatted = filmToAdd.poster
+        ? filmToAdd
+        : this.formatFilm(filmToAdd);
       if (!list.some((f) => f.id === formatted.id)) {
         list.push(formatted);
       }
@@ -124,13 +126,18 @@ export const useFilmStore = defineStore("film", {
 
     saveCurrentFilm() {
       if (!this.film) return;
-      this.addToList(this.savedFilms, this.film); // ✅ Toujours passe RAW → formatFilm gère tout
+      this.addToList(this.savedFilms, this.film);
       this.removeFromList(this.seenFilms, this.film.id);
     },
 
     markAsSeen(filmToMark: any) {
-      this.addToList(this.seenFilms, filmToMark); // ✅ Idem
-      this.removeFromList(this.savedFilms, filmToMark.id);
+      // Vérifie si le film a déjà un champ .poster complet :
+      const formatted = filmToMark.poster
+        ? filmToMark
+        : this.formatFilm(filmToMark);
+
+      this.addToList(this.seenFilms, formatted);
+      this.removeFromList(this.savedFilms, formatted.id);
     },
 
     removeSavedFilm(id: number) {

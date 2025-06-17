@@ -25,5 +25,6 @@ const store = useFilmStore();
 
 function markAsSeen() {
   store.markAsSeen(props.film);
+  store.fetchRandomFilm();
 }
 </script>
