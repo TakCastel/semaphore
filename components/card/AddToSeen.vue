@@ -4,7 +4,7 @@
     @click="markAsSeen"
   >
     <Icon name="solar:archive-minimalistic-bold-duotone" />
-    <span class="hidden xl:inline">Déjà vu</span>
+    <span class="hidden xl:inline">Je l'ai vu !</span>
   </button>
 </template>
 

@@ -30,6 +30,7 @@
             : null,
           id: film.id,
         }"
+        show-add-seen
         show-remove-watchlist
       />
     </div>

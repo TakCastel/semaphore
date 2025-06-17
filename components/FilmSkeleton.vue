@@ -4,7 +4,7 @@
     <div class="flex flex-col lg:flex-row gap-6">
       <!-- Image -->
       <div
-        class="w-full lg:w-1/2 lg:max-w-xs h-[60vh] bg-neutral-800 rounded-xl"
+        class="w-full lg:w-1/2 lg:max-w-xs aspect-[2/3] bg-neutral-800 rounded-xl"
       />
 
       <!-- Texte -->
