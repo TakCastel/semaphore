@@ -25,9 +25,7 @@
           title: film.title,
           release_date: film.release_date,
           overview: film.overview,
-          poster: film.poster
-            ? `https://image.tmdb.org/t/p/w500${film.poster}`
-            : null,
+          poster: film.poster,
           id: film.id,
         }"
         show-add-seen
@@ -38,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useFilmStore } from "@/stores/useFilms";
 
 const store = useFilmStore();

@@ -39,7 +39,7 @@ const props = withDefaults(
       title: string;
       release_date: string;
       overview: string;
-      poster?: string | null;
+      poster?: string | null; // ✅ URL complète
       id: number;
     };
     loading?: boolean;

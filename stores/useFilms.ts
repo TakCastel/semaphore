@@ -4,14 +4,15 @@ import { useRuntimeConfig } from "#app/nuxt";
 
 export const useFilmStore = defineStore("film", {
   state: () => ({
-    film: null as any | null,
-    savedFilms: [] as any[],
-    seenFilms: [] as any[],
+    film: null as any | null, // OBJET BRUT TMDB
+    savedFilms: [] as any[], // FORMATÉS avec poster complet
+    seenFilms: [] as any[], // FORMATÉS avec poster complet
     loading: false,
     fallbackTriggered: false,
   }),
 
   getters: {
+    // ✅ Génère l'URL du poster pour le film courant (film brut)
     poster(state) {
       if (!state.film?.poster_path) return null;
       return `https://image.tmdb.org/t/p/w500${state.film.poster_path}`;
@@ -68,7 +69,7 @@ export const useFilmStore = defineStore("film", {
             }
           );
 
-          let results = res.results || [];
+          const results = res.results || [];
 
           if (currentFilters.genre) {
             results = results.filter((movie) =>
@@ -78,7 +79,7 @@ export const useFilmStore = defineStore("film", {
 
           if (results.length > 0) {
             const randomIndex = Math.floor(Math.random() * results.length);
-            this.film = results[randomIndex];
+            this.film = results[randomIndex]; // RAW DATA
             break;
           }
 
@@ -96,11 +97,13 @@ export const useFilmStore = defineStore("film", {
       }
     },
 
+    // ✅ Format pour liste : toujours URL complète pour .poster
     formatFilm(raw: any) {
       return {
         id: raw.id,
         title: raw.title,
         overview: raw.overview,
+        release_date: raw.release_date, // Ajoute si tu l’utilises !
         poster: raw.poster_path
           ? `https://image.tmdb.org/t/p/w500${raw.poster_path}`
           : null,
@@ -108,8 +111,9 @@ export const useFilmStore = defineStore("film", {
     },
 
     addToList(list: any[], filmToAdd: any) {
-      if (!list.some((f) => f.id === filmToAdd.id)) {
-        list.push(this.formatFilm(filmToAdd));
+      const formatted = this.formatFilm(filmToAdd); // ✅ Génère poster complet
+      if (!list.some((f) => f.id === formatted.id)) {
+        list.push(formatted);
       }
     },
 
@@ -120,11 +124,13 @@ export const useFilmStore = defineStore("film", {
 
     saveCurrentFilm() {
       if (!this.film) return;
-      this.addToList(this.savedFilms, this.film);
+      this.addToList(this.savedFilms, this.film); // ✅ Toujours passe RAW → formatFilm gère tout
+      this.removeFromList(this.seenFilms, this.film.id);
     },
 
     markAsSeen(filmToMark: any) {
-      this.addToList(this.seenFilms, filmToMark);
+      this.addToList(this.seenFilms, filmToMark); // ✅ Idem
+      this.removeFromList(this.savedFilms, filmToMark.id);
     },
 
     removeSavedFilm(id: number) {
