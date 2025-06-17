@@ -13,7 +13,7 @@
 
       <!-- Actions en absolute, backdrop -->
       <div
-        class="absolute bottom-0 left-0 right-0 px-4 py-4 flex justify-between items-center backdrop-blur-md bg-black/50 z-20"
+        class="absolute bottom-0 left-0 right-0 px-4 py-4 flex justify-between items-center backdrop-blur-md bg-neutral-900/90 z-20"
       >
         <CardAddToSeen v-if="showAddSeen" />
         <div class="flex items-center gap-3">

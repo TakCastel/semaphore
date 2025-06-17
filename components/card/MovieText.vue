@@ -3,8 +3,8 @@
     class="absolute left-0 right-0 z-20 px-4 text-left text-white cursor-pointer select-none transition-all duration-300 ease-in-out"
     :class="[
       expanded
-        ? 'bottom-[88px] backdrop-blur bg-neutral-900/90 py-4'
-        : 'bottom-[88px] pb-4',
+        ? 'bottom-[88px] md:bottom-[72px] backdrop-blur bg-neutral-900/90 py-4'
+        : 'bottom-[88px] md:bottom-[72px] pb-4',
     ]"
     @click="toggle"
   >
