@@ -7,6 +7,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      version: process.env.npm_package_version,
       tmdbApiKey: process.env.TMDB_API_KEY,
     },
   },

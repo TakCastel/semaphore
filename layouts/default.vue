@@ -2,7 +2,7 @@
   <div
     class="min-h-screen flex flex-col bg-neutral-950 text-white font-sans pt-[80px]"
   >
-    <!-- Header en haut -->
+    <!-- Header -->
     <HeaderBase
       :filters-open="filtersOpen"
       @update:filters-open="filtersOpen = $event"
@@ -12,10 +12,13 @@
       <FiltersPanel :open="filtersOpen" @close="filtersOpen = false" />
     </Client-only>
 
-    <!-- Ici : pas de flex items-center justify-center ! -->
+    <!-- Contenu principal -->
     <main class="flex-grow">
       <slot />
     </main>
+
+    <!-- ✅ Footer ajouté ici -->
+    <FooterBase />
   </div>
 </template>
 
