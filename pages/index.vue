@@ -1,12 +1,5 @@
 <template>
   <main class="p-4 mx-auto text-white space-y-4 text-center max-w-6xl">
-    <!-- Zone des boutons -->
-    <div class="flex flex-wrap justify-between gap-4 max-w-md mx-auto">
-      <NewFilmButton />
-      <FiltersButton v-model:open="drawerOpen" />
-      <FiltersPanel :open="drawerOpen" @close="drawerOpen = false" />
-    </div>
-
     <!-- Message de fallback -->
     <p
       v-if="filmStore.fallbackTriggered"

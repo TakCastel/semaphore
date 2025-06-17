@@ -1,11 +1,11 @@
 <template>
   <div v-show="open" class="fixed inset-0 z-50 pointer-events-none">
-    <transition name="slide" mode="out-in">
+    <transition name="slide-down" mode="out-in">
       <aside
         v-show="open"
-        class="absolute right-0 top-[61px] h-[calc(100vh-61px)] w-[90vw] max-w-sm bg-neutral-950 text-white shadow-2xl border-l border-white/10 flex flex-col justify-between pointer-events-auto"
+        class="absolute top-0 left-0 right-0 h-screen bg-neutral-950 text-white shadow-2xl border-t border-white/10 flex flex-col justify-between pointer-events-auto"
         tabindex="0"
-        @keyup.esc="onEsc"
+        @keyup.esc="emitClose"
       >
         <!-- Header -->
         <div class="relative px-6 pt-6 pb-4 border-b border-white/10">
@@ -20,7 +20,7 @@
         </div>
 
         <!-- Formulaire -->
-        <div class="flex-1 p-4">
+        <div class="flex-1 p-4 overflow-y-auto">
           <FormKit type="form" :actions="false" @submit="apply">
             <FormKit
               v-model="filters.genre"
@@ -91,7 +91,6 @@
 import { useFiltersStore } from "@/stores/useFilters";
 import { useFilmStore } from "@/stores/useFilms";
 import { useFiltersOptions } from "@/composables/useFiltersOptions";
-import { defineProps, defineEmits } from "vue";
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits(["close"]);
@@ -114,25 +113,21 @@ function reset() {
 function emitClose() {
   emit("close");
 }
-
-function onEsc() {
-  emit("close");
-}
 </script>
 
 <style scoped>
-.slide-enter-active,
-.slide-leave-active {
+.slide-down-enter-active,
+.slide-down-leave-active {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateX(100%);
+.slide-down-enter-from,
+.slide-down-leave-to {
+  transform: translateY(-100%);
   opacity: 0;
 }
-.slide-enter-to,
-.slide-leave-from {
-  transform: translateX(0);
+.slide-down-enter-to,
+.slide-down-leave-from {
+  transform: translateY(0);
   opacity: 1;
 }
 </style>

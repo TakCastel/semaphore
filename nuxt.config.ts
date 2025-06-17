@@ -46,6 +46,8 @@ export default defineNuxtConfig({
     },
   },
 
+  css: ["/assets/css/main.css"],
+
   formkit: {
     // Experimental support for auto loading (see note):
     autoImport: true,
