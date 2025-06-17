@@ -1,7 +1,8 @@
 <template>
   <div
-    class="relative w-full max-w-md rounded-xl overflow-hidden shadow-lg bg-black"
+    class="relative w-full max-w-md rounded-xl overflow-hidden shadow-lg bg-black flex flex-col"
   >
+    <!-- Affiche -->
     <div class="relative aspect-[2/3] group">
       <NuxtLink
         v-if="film?.id"
@@ -15,8 +16,10 @@
       />
     </div>
 
+    <!-- Texte -->
     <FilmText
       v-if="displaySynopsis"
+      class="flex-grow px-4 pt-4"
       :title="film?.title"
       :overview="film?.overview"
       :expanded="expanded"
@@ -24,7 +27,9 @@
       @toggle="toggle"
     />
 
+    <!-- Actions en bas -->
     <FilmActions
+      class="px-4 pb-4"
       :film-id="film?.id"
       :loading="loading"
       :show-remove="showRemove"

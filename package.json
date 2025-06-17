@@ -20,6 +20,7 @@
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "@pinia/nuxt": "^0.11.1",
     "eslint": "^9.28.0",
+    "localforage": "^1.10.0",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.3.0",
@@ -29,5 +30,6 @@
   "devDependencies": {
     "tailwindcss": "^4.1.10",
     "vite-tsconfig-paths": "^5.1.4"
-  }
+  },
+  "packageManager": "pnpm@8.15.4+sha512.0bd3a9be9eb0e9a692676deec00a303ba218ba279d99241475616b398dbaeedd11146f92c2843458f557b1d127e09d4c171e105bdcd6b61002b39685a8016b9e"
 }

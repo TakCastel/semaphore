@@ -2,7 +2,7 @@
   <div class="fixed top-0 w-full px-4 py-4 z-50">
     <!-- PILL : max-w + shadow -->
     <div
-      class="relative max-w-6xl mx-auto flex items-center justify-between bg-neutral-900 rounded-full px-6 py-3 shadow-xl z-50"
+      class="relative max-w-6xl mx-auto flex items-center justify-between bg-neutral-900 rounded-full pl-6 md:pl-4 pr-6 py-3 shadow-xl z-50"
     >
       <HeaderLogo />
       <HeaderNavDesktop class="hidden xl:block" />

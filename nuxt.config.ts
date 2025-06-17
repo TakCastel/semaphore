@@ -21,8 +21,6 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/image",
     "@nuxtjs/tailwindcss",
-    "@pinia/nuxt",
-    "pinia-plugin-persistedstate/nuxt",
     "@formkit/nuxt",
   ],
 

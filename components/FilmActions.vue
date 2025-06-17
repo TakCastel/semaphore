@@ -1,44 +1,38 @@
 <template>
   <div
     v-if="!loading"
-    class="absolute top-4 left-0 right-0 z-30 px-4 flex justify-between items-start"
+    class="flex justify-between items-center px-4 py-4 w-full"
   >
     <!-- Bouton Déjà vu -->
     <button
       v-if="!isSavedPage"
-      class="group cursor-pointer flex flex-col xl:flex-row items-center justify-center gap-0 xl:gap-2 rounded-full w-14 h-14 xl:w-auto xl:h-auto p-3 xl:px-4 xl:py-2 bg-gradient-to-b from-purple-500 to-purple-700 text-white shadow-[inset_0_2px_1px_rgba(255,255,255,0.2),_0_4px_8px_rgba(0,0,0,0.3)] hover:brightness-110 active:scale-95 transition duration-200 font-semibold text-base"
+      class="group cursor-pointer flex items-center justify-center gap-2 rounded-full px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-purple-400 hover:text-white transition font-semibold text-base"
       @click.stop="markSeen"
     >
       <Icon name="solar:archive-minimalistic-bold-duotone" />
-      <span class="hidden xl:inline-block whitespace-nowrap text-left">
-        Déjà vu
-      </span>
+      <span class="hidden xl:inline-block">Déjà vu</span>
     </button>
 
     <!-- Boutons côté droit -->
-    <div class="flex flex-col items-end gap-3">
+    <div class="flex items-center gap-3">
       <!-- Bouton Ça m'intéresse -->
       <button
         v-if="!isSavedPage"
-        class="group cursor-pointer flex flex-col xl:flex-row items-center justify-center gap-0 xl:gap-2 rounded-full w-14 h-14 xl:w-auto xl:h-auto p-3 xl:px-4 xl:py-2 bg-gradient-to-b from-green-400 to-green-600 text-white shadow-[inset_0_2px_1px_rgba(255,255,255,0.2),_0_4px_8px_rgba(0,0,0,0.3)] hover:brightness-110 active:scale-95 transition duration-200 font-semibold text-base"
+        class="group cursor-pointer flex items-center justify-center gap-2 rounded-full px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-green-400 hover:text-white transition font-semibold text-base"
         @click.stop="saveFilm"
       >
         <Icon name="solar:heart-angle-bold" />
-        <span class="hidden xl:inline-block whitespace-nowrap text-left">
-          Ça m'intéresse
-        </span>
+        <span class="hidden xl:inline-block">Ça m'intéresse</span>
       </button>
 
       <!-- Bouton Retirer -->
       <button
         v-if="showRemove"
-        class="group cursor-pointer flex flex-col xl:flex-row items-center justify-center gap-0 xl:gap-2 rounded-full w-14 h-14 xl:w-auto xl:h-auto p-3 xl:px-4 xl:py-2 bg-gradient-to-b from-red-500 to-red-700 text-white shadow-[inset_0_2px_1px_rgba(255,255,255,0.2),_0_4px_8px_rgba(0,0,0,0.3)] hover:brightness-110 active:scale-95 transition duration-200 font-semibold text-base"
+        class="group cursor-pointer flex items-center justify-center gap-2 rounded-full px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-red-400 hover:text-white transition font-semibold text-base"
         @click.stop="emit('remove')"
       >
         <Icon name="fluent-emoji-high-contrast:cross-mark" />
-        <span class="hidden xl:inline-block whitespace-nowrap text-left">
-          Retirer
-        </span>
+        <span class="hidden xl:inline-block">Retirer</span>
       </button>
     </div>
   </div>

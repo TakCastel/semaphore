@@ -21,7 +21,7 @@
       v-else
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
-      <FilmCard
+      <CardBase
         v-for="film in seenFilms"
         :key="film.id"
         :film="{
@@ -33,11 +33,6 @@
             : null,
           id: film.id,
         }"
-        :loading="false"
-        :show-remove="false"
-        :is-saved-page="true"
-        :display-synopsis="false"
-        @remove="() => removeSeenFilm(film.id)"
       />
     </div>
   </main>
@@ -49,8 +44,4 @@ import { useFilmStore } from "@/stores/useFilms";
 
 const store = useFilmStore();
 const seenFilms = computed(() => store.seenFilms);
-
-function removeSeenFilm(id: number) {
-  store.removeSeenFilm(id);
-}
 </script>

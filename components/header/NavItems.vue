@@ -7,8 +7,10 @@
       :class="linkClasses(item)"
       @click="onClick"
     >
-      <Icon :name="item.icon" :class="iconSize" />
       <span>{{ item.label }}</span>
+      <div class="py-1 pl-1 flex items-center justify-center">
+        <Icon :name="item.icon" :class="iconSize" />
+      </div>
     </NuxtLink>
   </div>
 </template>
@@ -23,7 +25,7 @@ const emit = defineEmits(["click"]);
 const route = useRoute();
 
 const wrapClass = props.vertical
-  ? "flex flex-col items-start gap-6 text-left px-6 pt-8 md:pt-10 pb-5 backdrop-blur"
+  ? "flex flex-col items-end gap-6 text-left pl-6 pr-8 pt-8 md:pt-10 pb-5 backdrop-blur"
   : "flex items-center gap-8 text-neutral-300 xl:flex hidden";
 
 const iconSize = props.iconSize || "";

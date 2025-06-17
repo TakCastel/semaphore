@@ -1,31 +1,41 @@
-// stores/useFilms.ts
 import { defineStore } from "pinia";
 import { useFiltersStore } from "./useFilters";
+import { useRuntimeConfig } from "#app/nuxt";
 
-export const useFilmStore = defineStore(
-  "film",
-  () => {
-    const config = useRuntimeConfig();
-    const film = ref<any | null>(null);
-    const savedFilms = ref<any[]>([]);
-    const seenFilms = ref<any[]>([]);
-    const loading = ref(false);
-    const fallbackTriggered = ref(false);
+export const useFilmStore = defineStore("film", {
+  state: () => ({
+    film: null as any | null,
+    savedFilms: [] as any[],
+    seenFilms: [] as any[],
+    loading: false,
+    fallbackTriggered: false,
+  }),
 
-    async function fetchRandomFilm() {
-      loading.value = true;
-      film.value = null;
+  getters: {
+    poster(state) {
+      if (!state.film?.poster_path) return null;
+      return `https://image.tmdb.org/t/p/w500${state.film.poster_path}`;
+    },
+    isSaved: (state) => (id: number) =>
+      state.savedFilms.some((f) => f.id === id),
+    isSeen: (state) => (id: number) => state.seenFilms.some((f) => f.id === id),
+  },
 
+  actions: {
+    async fetchRandomFilm() {
+      this.loading = true;
+      this.film = null;
+
+      const config = useRuntimeConfig();
       const filters = useFiltersStore();
       const maxPages = 500;
       const maxAttempts = 50;
-
       let step = 0;
 
       try {
-        fallbackTriggered.value = false;
+        this.fallbackTriggered = false;
 
-        while (!film.value && step < maxAttempts) {
+        while (!this.film && step < maxAttempts) {
           const currentFilters = { ...filters };
 
           if (step >= 5) currentFilters.includeAdult = true;
@@ -68,26 +78,25 @@ export const useFilmStore = defineStore(
 
           if (results.length > 0) {
             const randomIndex = Math.floor(Math.random() * results.length);
-            film.value = results[randomIndex];
+            this.film = results[randomIndex];
             break;
           }
 
           step++;
-          if (step === 2) fallbackTriggered.value = true;
+          if (step === 2) this.fallbackTriggered = true;
         }
       } catch (err) {
         console.error("Erreur TMDB :", err);
       } finally {
-        loading.value = false;
+        this.loading = false;
       }
 
-      if (!film.value) {
+      if (!this.film) {
         console.warn("Aucun film trouvé malgré l’élargissement progressif.");
       }
-    }
+    },
 
-    // Format minimal pour une Card
-    function formatFilm(raw: any) {
+    formatFilm(raw: any) {
       return {
         id: raw.id,
         title: raw.title,
@@ -96,65 +105,34 @@ export const useFilmStore = defineStore(
           ? `https://image.tmdb.org/t/p/w500${raw.poster_path}`
           : null,
       };
-    }
+    },
 
-    function addToList(list: Ref<any[]>, filmToAdd: any) {
-      if (!list.value.some((f) => f.id === filmToAdd.id)) {
-        list.value.push(formatFilm(filmToAdd));
+    addToList(list: any[], filmToAdd: any) {
+      if (!list.some((f) => f.id === filmToAdd.id)) {
+        list.push(this.formatFilm(filmToAdd));
       }
-    }
+    },
 
-    function removeFromList(list: Ref<any[]>, id: number) {
-      list.value = list.value.filter((f) => f.id !== id);
-    }
+    removeFromList(list: any[], id: number) {
+      const index = list.findIndex((f) => f.id === id);
+      if (index !== -1) list.splice(index, 1);
+    },
 
-    function saveCurrentFilm() {
-      if (!film.value) return;
-      addToList(savedFilms, film.value);
-    }
+    saveCurrentFilm() {
+      if (!this.film) return;
+      this.addToList(this.savedFilms, this.film);
+    },
 
-    function markAsSeen(filmToMark: any) {
-      addToList(seenFilms, filmToMark);
-    }
+    markAsSeen(filmToMark: any) {
+      this.addToList(this.seenFilms, filmToMark);
+    },
 
-    function removeSavedFilm(id: number) {
-      removeFromList(savedFilms, id);
-    }
+    removeSavedFilm(id: number) {
+      this.removeFromList(this.savedFilms, id);
+    },
 
-    function removeSeenFilm(id: number) {
-      removeFromList(seenFilms, id);
-    }
-
-    function isSaved(id: number) {
-      return savedFilms.value.some((f) => f.id === id);
-    }
-
-    function isSeen(id: number) {
-      return seenFilms.value.some((f) => f.id === id);
-    }
-
-    const poster = computed(() => {
-      if (!film.value?.poster_path) return null;
-      return `https://image.tmdb.org/t/p/w500${film.value.poster_path}`;
-    });
-
-    return {
-      film,
-      poster,
-      loading,
-      fallbackTriggered,
-      fetchRandomFilm,
-      saveCurrentFilm,
-      savedFilms,
-      removeSavedFilm,
-      isSaved,
-      isSeen,
-      seenFilms,
-      markAsSeen,
-      removeSeenFilm,
-    };
+    removeSeenFilm(id: number) {
+      this.removeFromList(this.seenFilms, id);
+    },
   },
-  {
-    persist: true,
-  }
-);
+});

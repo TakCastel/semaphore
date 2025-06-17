@@ -18,7 +18,7 @@
 
     <!-- Liste des films en grille responsive -->
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <FilmCard
+      <CardBase
         v-for="film in savedFilms"
         :key="film.id"
         :film="{
@@ -30,9 +30,7 @@
             : null,
           id: film.id,
         }"
-        :loading="false"
-        :show-remove="true"
-        :is-saved-page="true"
+        show-remove-watchlist
       />
     </div>
   </main>

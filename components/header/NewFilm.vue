@@ -17,9 +17,12 @@
 </template>
 
 <script setup lang="ts">
-const store = useFilmStore();
-const fetchRandomFilm = store.fetchRandomFilm;
-const loading = computed(() => store.loading);
+import { useFilmStore } from "@/stores/useFilms";
+
+const filmStore = useFilmStore();
+
+const fetchRandomFilm = filmStore.fetchRandomFilm;
+const loading = computed(() => filmStore.loading);
 
 // Afficher uniquement sur la page d'accueil
 const route = useRoute();
